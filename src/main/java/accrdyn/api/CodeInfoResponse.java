@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude()
-public class CodeInfo {
+public class CodeInfoResponse {
 
     @JsonProperty( "system" )
     private String system;
@@ -18,10 +18,10 @@ public class CodeInfo {
     @JsonProperty( "description" )
     private String description;
 
-    public CodeInfo() {
+    public CodeInfoResponse() {
     }
 
-    public CodeInfo( String system, String code, String version, String description ) {
+    public CodeInfoResponse( String system, String code, String version, String description ) {
         this.system = system;
         this.code = code;
         this.version = version;

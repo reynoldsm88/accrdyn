@@ -1,18 +1,24 @@
 package accrdyn.controllers;
 
-import accrdyn.api.CodeInfo;
+import accrdyn.api.CodeInfoRequest;
+import accrdyn.api.CodeInfoResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping( "/query" )
 public class QueryController {
 
-    @RequestMapping( "/codes" )
-    public ResponseEntity<CodeInfo> codeInfo( String system, String code ) {
-        CodeInfo info = new CodeInfo( "FAKE_0", "00000", "2025", "cassette tapes" );
-        return ResponseEntity.ok( new CodeInfo() );
+    @PostMapping( "/codes" )
+    @ResponseBody
+    public ResponseEntity<CodeInfoResponse> codeInfo( @RequestBody CodeInfoRequest request ) {
+
+        CodeInfoResponse response = new CodeInfoResponse();
+        response.setSystem( request.getSystem() );
+        response.setCode( request.getCode() );
+
+
+        return ResponseEntity.ok( response );
     }
 
     @RequestMapping( "/concord" )
