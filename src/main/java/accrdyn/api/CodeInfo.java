@@ -21,6 +21,13 @@ public class CodeInfo {
     public CodeInfo() {
     }
 
+    public CodeInfo( String system, String code, String version, String description ) {
+        this.system = system;
+        this.code = code;
+        this.version = version;
+        this.description = description;
+    }
+
     public String getSystem() {
         return system;
     }
