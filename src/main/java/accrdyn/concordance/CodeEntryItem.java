@@ -1,4 +1,4 @@
-package accrdyn.internal;
+package accrdyn.concordance;
 
 public class CodeEntryItem {
 

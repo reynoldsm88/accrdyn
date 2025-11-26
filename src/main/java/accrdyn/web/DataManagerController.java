@@ -1,4 +1,4 @@
-package accrdyn.controllers;
+package accrdyn.web;
 
 public class DataManagerController {
 }

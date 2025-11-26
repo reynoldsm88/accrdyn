@@ -7,7 +7,10 @@
 
     <properties>
         <java.version>TODO</java.version>
+
+        <elasticsearch.version>9.2.1</elasticsearch.version>
         <spring.boot.version>4.0.0</spring.boot.version>
+
     </properties>
 
     <dependencies>
@@ -16,6 +19,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+
     </dependencies>
 
 

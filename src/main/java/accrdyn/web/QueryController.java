@@ -1,7 +1,5 @@
-package accrdyn.controllers;
+package accrdyn.web;
 
-import accrdyn.api.CodeInfoRequest;
-import accrdyn.api.CodeInfoResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

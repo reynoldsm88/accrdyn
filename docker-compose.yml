@@ -1,0 +1,29 @@
+services:
+
+  elasticsearch:
+    image: elasticsearch:9.2.1
+    container_name: elasticsearch
+    hostname: elasticsearch
+    environment:
+      discovery.type: 'single-node'
+      xpack.security.enabled: 'false'
+      ES_JAVA_OPTS: '-Xmx2g -Xms2g'
+    ports:
+      - 9200:9200
+    mem_limit: 2g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:9200 | grep -q 'cluster_name'",
+        ]
+      interval: 20s
+      timeout: 10s
+      retries: 120
+#    volumes:
+#      - ./data:/usr/elasticsearch/data

@@ -1,4 +1,4 @@
-package accrdyn.api;
+package accrdyn.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
