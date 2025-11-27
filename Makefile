@@ -6,3 +6,6 @@ test:
 
 run: build
 	java -jar target/accrdyn-web-api-0.0.1-SNAPSHOT.jar
+
+docker:
+	docker build -t accrdyn:latest .
