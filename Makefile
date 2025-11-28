@@ -1,11 +1,14 @@
-build:
+package:
 	mvn clean package
+
+fastpack:
+	mvn clean package -DskipTests
 
 test:
 	mvn clean test
 
-run: build
+run: fastpack
 	java -jar target/accrdyn-web-api-0.0.1-SNAPSHOT.jar
 
-docker:
+docker: fastpack
 	docker build -t accrdyn:latest .

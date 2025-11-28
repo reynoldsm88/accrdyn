@@ -3,6 +3,7 @@
     <groupId>accrdyn</groupId>
     <artifactId>accrdyn-web-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
 
     <properties>
@@ -108,13 +109,6 @@
                 <version>${spring.boot.version}</version>
                 <configuration>
                     <mainClass>accrdyn.AccrdynWebAPI</mainClass>
-                    <layout>JAR</layout>
-                    <includes>
-                        <include>
-                            <groupId>non-existent</groupId>
-                            <artifactId>non-existent</artifactId>
-                        </include>
-                    </includes>
                 </configuration>
                 <executions>
                     <execution>
