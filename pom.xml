@@ -12,6 +12,7 @@
 
         <drools.version>10.1.0</drools.version>
         <elasticsearch.version>9.2.1</elasticsearch.version>
+        <tablesaw.version>0.44.4</tablesaw.version>
 
         <spring.boot.version>4.0.0</spring.boot.version>
 
@@ -53,6 +54,12 @@
             <groupId>co.elastic.clients</groupId>
             <artifactId>elasticsearch-java</artifactId>
             <version>${elasticsearch.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.tablesaw</groupId>
+            <artifactId>tablesaw-core</artifactId>
+            <version>${tablesaw.version}</version>
         </dependency>
 
         <dependency>
@@ -117,6 +124,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
