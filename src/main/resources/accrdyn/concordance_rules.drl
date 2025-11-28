@@ -1,0 +1,8 @@
+package accrdyn;
+
+rule "test rule"
+    when
+        $string : String()
+    then
+        System.out.println($string);
+end

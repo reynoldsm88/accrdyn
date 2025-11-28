@@ -1,0 +1,11 @@
+<kmodule xmlns="http://www.drools.org/xsd/kmodule"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <kbase
+            name="concordance.rules.kbase"
+            default="true"
+            packages="accrdyn">
+        <ksession name="concordance.rules.ksession" type="stateful" default="true"/>
+    </kbase>
+
+</kmodule>
