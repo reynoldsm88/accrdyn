@@ -2,10 +2,18 @@ package accrdyn.concordance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import tech.tablesaw.api.ColumnType;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
+import tech.tablesaw.io.csv.CsvReadOptions;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,14 +22,10 @@ public class CodeSystemRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger( CodeSystemRegistry.class );
 
-    private Set<CodeSystem> codeSystems;
+    private Set<CodeSystem> codeSystems = new HashSet<>();
 
     public CodeSystemRegistry() {
-
-    }
-
-    public void addCodeSystem( CodeSystem system ) {
-        this.codeSystems.add( system );
+        super();
     }
 
     public CodeSystem byName( String name ) {
@@ -38,12 +42,11 @@ public class CodeSystemRegistry {
     }
 
     public CodeSystem byNameAndVersion( String name, String version ) {
-
-        return null;
+        throw new RuntimeException( "VERSIONING IS NOT IMPLEMENTED YET...." );
     }
 
     public void init() {
-        if ( this.codeSystems == null ) {
+        if ( this.codeSystems.isEmpty() ) {
             try {
                 this.loadCodeSystemDefinitions();
             } catch ( IOException e ) {
@@ -55,9 +58,55 @@ public class CodeSystemRegistry {
     }
 
     private void loadCodeSystemDefinitions() throws IOException {
+        ClassLoader classLoader = MethodHandles.lookup().getClass().getClassLoader();
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver( classLoader );
+
+        Resource[] codeSystemFiles = resolver.getResources( "classpath:code_systems/*.csv" );
+
+        for ( Resource codeSystemCsv : codeSystemFiles ) {
+            if ( codeSystemCsv.isFile() ) {
+                this.codeSystems.add( this.loadCodeSystemDefinition( codeSystemCsv.getFile() ) );
+            }
+        }
     }
 
-    private void loadCodeSystemDefinition( File csvFile ) throws IOException{
+    private CodeSystem loadCodeSystemDefinition( File csvFile ) throws IOException {
+        CsvReadOptions options = CsvReadOptions.builder( csvFile ).columnTypes( new ColumnType[]{ ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, } ).build();
 
+        Table codeTable = Table.read().csv( options );
+
+        Column<String> systemCol = codeTable.column( "system" ).unique().asStringColumn();
+        Column<String> versionCol = codeTable.column( "version" ).unique().asStringColumn();
+
+        String name = null;
+        if ( systemCol.size() == 1 ) {
+            name = systemCol.get( 0 );
+        } else {
+            throw new RuntimeException( "fix this!!!" );
+        }
+
+        String version = null;
+        if ( versionCol.size() == 1 ) {
+            version = versionCol.get( 0 );
+        } else {
+            throw new RuntimeException( "fix this!!!" );
+        }
+
+        List<CodeDefinition> codes = codeTable.stream().map( row -> {
+            String code = row.getString( "code" );
+            String description = row.getString( "description" );
+            return new CodeDefinition( code, description );
+        } ).toList();
+
+        return new CodeSystem( name, version, codes );
+
+    }
+
+    public Set<CodeSystem> getCodeSystems() {
+        return codeSystems;
+    }
+
+    public void setCodeSystems( Set<CodeSystem> codeSystems ) {
+        this.codeSystems = codeSystems;
     }
 }

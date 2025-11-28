@@ -50,4 +50,13 @@ public class CodeSystem {
     public int hashCode() {
         return Objects.hash( name, version, codes );
     }
+
+    @Override
+    public String toString() {
+        return "CodeSystem{" +
+                "name='" + name + '\'' +
+                ", version='" + version + '\'' +
+                ", codes=" + codes +
+                '}';
+    }
 }
