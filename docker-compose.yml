@@ -25,5 +25,10 @@ services:
       interval: 20s
       timeout: 10s
       retries: 120
+    networks:
+      - accrdyn-network
 #    volumes:
 #      - ./data:/usr/elasticsearch/data
+
+networks:
+  accrdyn-network:
