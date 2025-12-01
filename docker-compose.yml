@@ -1,5 +1,15 @@
 services:
 
+  accrdyn-web:
+    image: accrdyn:latest
+    container_name: accrdyn-web
+    hostname: accrdyn-web
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    networks:
+      - accrdyn-network
+
   elasticsearch:
     image: elasticsearch:9.2.1
     container_name: elasticsearch
