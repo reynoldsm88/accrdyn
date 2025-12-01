@@ -11,12 +11,10 @@
         "type": "text"
       },
       "embedding": {
-        "description_embedding": {
-          "type": "dense_vector",
-          "dims": 100,
-          "index": true,
-          "similarity": "dot_product"
-        }
+        "type": "dense_vector",
+        "dims": 100,
+        "index": true,
+        "similarity": "dot_product"
       }
     }
   }
