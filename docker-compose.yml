@@ -6,6 +6,9 @@ services:
     hostname: accrdyn-web
     ports:
       - 8080:8080
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - accrdyn-network
