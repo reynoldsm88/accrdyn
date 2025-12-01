@@ -10,6 +10,7 @@
         <java.version>TODO</java.version>
 
 
+        <dlj.version>0.35.0</dlj.version>
         <drools.version>10.1.0</drools.version>
         <elasticsearch.version>9.2.1</elasticsearch.version>
         <tablesaw.version>0.44.4</tablesaw.version>
@@ -23,12 +24,31 @@
     </properties>
 
     <dependencies>
+        <!-- spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
 
+        <!-- nlp libraries -->
+        <dependency>
+            <groupId>ai.djl</groupId>
+            <artifactId>api</artifactId>
+            <version>${dlj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-engine</artifactId>
+            <version>${dlj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ai.djl</groupId>
+            <artifactId>model-zoo</artifactId>
+            <version>${dlj.version}</version>
+        </dependency>
+
+        <!-- rule engine -->
         <dependency>
             <groupId>org.drools</groupId>
             <artifactId>drools-core</artifactId>
@@ -50,12 +70,14 @@
             <version>${drools.version}</version>
         </dependency>
 
+        <!-- datasources (ES etc...) -->
         <dependency>
             <groupId>co.elastic.clients</groupId>
             <artifactId>elasticsearch-java</artifactId>
             <version>${elasticsearch.version}</version>
         </dependency>
 
+        <!-- utilities -->
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-core</artifactId>
@@ -73,6 +95,7 @@
             <version>2.20</version>
         </dependency>
 
+        <!-- infrastructure -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
