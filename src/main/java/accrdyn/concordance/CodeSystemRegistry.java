@@ -1,9 +1,9 @@
 package accrdyn.concordance;
 
+import accrdyn.utils.ClasspathResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
@@ -11,7 +11,6 @@ import tech.tablesaw.io.csv.CsvReadOptions;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -58,10 +57,7 @@ public class CodeSystemRegistry {
     }
 
     private void loadCodeSystemDefinitions() throws IOException {
-        ClassLoader classLoader = MethodHandles.lookup().getClass().getClassLoader();
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver( classLoader );
-
-        Resource[] codeSystemFiles = resolver.getResources( "classpath:code_systems/*.csv" );
+        Resource[] codeSystemFiles = ClasspathResources.allFrom( "classpath:code_systems/*.csv" );
 
         for ( Resource codeSystemCsv : codeSystemFiles ) {
             if ( codeSystemCsv.isFile() ) {
