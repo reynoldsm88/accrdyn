@@ -61,6 +61,10 @@ public class BertTextEmbedder implements TextEmbedder {
                     //@formatter:on
 
                 ZooModel<String, float[]> model = criteria.loadModel();
+
+
+                // NOTE - automatically loaded model is: distilbert-multilingual-nli-stsb-quora-ranking, 786 dims
+                LOG.info( String.format( "BERT model loaded: name = %s", model.getName() ) );
                 this.modelPredictor = model.newPredictor();
                 LOG.info( "BERT word embedder finished initializing..." );
 

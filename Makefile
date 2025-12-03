@@ -12,3 +12,6 @@ run: fastpack
 
 docker: fastpack
 	docker build -t accrdyn:latest .
+
+compose: docker
+	docker compose up -d
