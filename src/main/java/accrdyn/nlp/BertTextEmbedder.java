@@ -9,21 +9,21 @@ import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class BertTextEmbedder implements TextEmbedder {
 
     private static final Logger LOG = LoggerFactory.getLogger( BertTextEmbedder.class );
 
-    private Predictor<String, float[]> modelPredictor;
+    private static final String MODEL_ENGINE = "PyTorch";
 
-    public BertTextEmbedder() {
-        super();
-        this.modelPredictor = null;
-    }
+    private Predictor<String, float[]> modelPredictor;
 
     @Override
     public float[] embed( String text ) {
@@ -44,21 +44,29 @@ public class BertTextEmbedder implements TextEmbedder {
         }
     }
 
+    @PostConstruct
     public void init() throws InitializationException {
         try {
-            //@formatter:off
-            Criteria<String, float[]> criteria =
-                    Criteria.builder()
-                            .optApplication( Application.NLP.TEXT_EMBEDDING )
-                            .setTypes( String.class, float[].class )
-                            .optDevice( Device.cpu() )
-                            .optEngine( "PyTorch" )
-                            .optProgress( new ProgressBar() )
+            if ( this.modelPredictor == null ) {
+                LOG.info( "initializing BERT word embedder. this might take a few seconds..." );
+                //@formatter:off
+                    Criteria<String, float[]> criteria =
+                            Criteria.builder()
+                                .optApplication( Application.NLP.TEXT_EMBEDDING )
+                                .setTypes( String.class, float[].class )
+                                .optDevice( Device.cpu() )
+                                .optEngine( BertTextEmbedder.MODEL_ENGINE )
+                                .optProgress( new ProgressBar() )
                             .build();
-            //@formatter:on
+                    //@formatter:on
 
-            ZooModel<String, float[]> model = criteria.loadModel();
-            this.modelPredictor = model.newPredictor();
+                ZooModel<String, float[]> model = criteria.loadModel();
+                this.modelPredictor = model.newPredictor();
+                LOG.info( "BERT word embedder finished initializing..." );
+
+            } else {
+                LOG.warn( "BERT word embedder already initialized..." );
+            }
         } catch ( ModelNotFoundException | MalformedModelException | IOException e ) {
             //@formatter:off
             throw new InitializationException(

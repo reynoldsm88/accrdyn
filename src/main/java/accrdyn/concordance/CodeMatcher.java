@@ -3,9 +3,9 @@ package accrdyn.concordance;
 
 import accrdyn.datasource.elasticsearch.ESClient;
 import accrdyn.exceptions.InitializationException;
+import accrdyn.nlp.TextEmbedder;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
-import co.elastic.clients.elasticsearch.cat.ElasticsearchCatClient;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
 import co.elastic.clients.elasticsearch.indices.GetIndexRequest;
@@ -19,9 +19,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 @Component
@@ -32,18 +30,13 @@ public class CodeMatcher {
     private static final String INDEX = "code_entries";
 
     @Value( "classpath:elasticsearch_schema/code_entries.json" )
-    Resource codeEntryMappings;
+    private Resource codeEntryMappings;
 
     @Autowired
-    public ESClient esClient;
+    private ESClient esClient;
 
-    public ESClient getEsClient() {
-        return esClient;
-    }
-
-    public void setEsClient( ESClient esClient ) {
-        this.esClient = esClient;
-    }
+    @Autowired
+    private TextEmbedder embedder;
 
     @PostConstruct
     public void init() throws IOException {
@@ -83,5 +76,29 @@ public class CodeMatcher {
             LOG.error( "encountered error when trying to read index mappings for index = " + CodeMatcher.INDEX );
             throw new InitializationException( "unable to locate or read mappings file for index = " + CodeMatcher.INDEX, ioe, this.getClass(), "config_file" );
         }
+    }
+
+    public ESClient getEsClient() {
+        return esClient;
+    }
+
+    public void setEsClient( ESClient esClient ) {
+        this.esClient = esClient;
+    }
+
+    public Resource getCodeEntryMappings() {
+        return codeEntryMappings;
+    }
+
+    public void setCodeEntryMappings( Resource codeEntryMappings ) {
+        this.codeEntryMappings = codeEntryMappings;
+    }
+
+    public TextEmbedder getEmbedder() {
+        return embedder;
+    }
+
+    public void setEmbedder( TextEmbedder embedder ) {
+        this.embedder = embedder;
     }
 }
