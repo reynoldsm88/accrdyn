@@ -4,12 +4,11 @@ package accrdyn.concordance;
 import accrdyn.datasource.elasticsearch.ESClient;
 import accrdyn.exceptions.InitializationException;
 import accrdyn.nlp.TextEmbedder;
+import accrdyn.utils.ClasspathResources;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
-import co.elastic.clients.elasticsearch.indices.GetIndexRequest;
-import co.elastic.clients.elasticsearch.indices.GetIndexResponse;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,25 +37,29 @@ public class CodeMatcher {
     @Autowired
     private TextEmbedder embedder;
 
+    @Value( "${accrdyn.app.seed.on.startup}" )
+    private boolean seedDataOnStartup;
+
+
     @PostConstruct
     public void init() throws IOException {
         ElasticsearchClient client = this.esClient.getClient();
-
         try {
-            GetIndexRequest indexReq = GetIndexRequest.of( builder -> {
-                return builder.index( CodeMatcher.INDEX );
-            } );
+            this.initializeIndex( client );
+            if ( seedDataOnStartup ) this.seedSemanticSearchData( client );
+        } catch ( Exception e ) {
 
-            GetIndexResponse indexResp = client.indices().get( indexReq );
-        } catch ( ElasticsearchException e ) {
-            if ( e.getMessage().contains( "no such index" ) ) {
-                LOG.info( "semantic search index not initialized, creating now..." );
-                try {
-                    this.initializeIndex( client );
-                } catch ( Exception ex ) {
-                    throw new RuntimeException( ex );
-                }
+        }
+    }
+
+    private void seedSemanticSearchData( ElasticsearchClient client ) throws InitializationException {
+        try {
+            for ( Resource seedFile : ClasspathResources.allFrom( "classpath:semantic_search_seed/*.csv" ) ) {
+                System.out.println( "TODO..." );
             }
+
+        } catch ( IOException e ) {
+            //TODO - finish this...
         }
     }
 
@@ -72,9 +75,22 @@ public class CodeMatcher {
 
             CreateIndexResponse createResp = client.indices().create( createReq );
 
+        } catch ( ElasticsearchException e ) {
+            LOG.error( String.format( "encountered error while initializing index '%s'", CodeMatcher.INDEX ) );
+            throw new InitializationException(
+                    String.format( "error creating elasitcsearch index '%s'", CodeMatcher.INDEX ),
+                    e,
+                    this.getClass(),
+                    "elasticsearch"
+            );
         } catch ( IOException ioe ) {
             LOG.error( "encountered error when trying to read index mappings for index = " + CodeMatcher.INDEX );
-            throw new InitializationException( "unable to locate or read mappings file for index = " + CodeMatcher.INDEX, ioe, this.getClass(), "config_file" );
+            throw new InitializationException(
+                    "unable to locate or read mappings file for index = " + CodeMatcher.INDEX,
+                    ioe,
+                    this.getClass(),
+                    "config_file"
+            );
         }
     }
 
