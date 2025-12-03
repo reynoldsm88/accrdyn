@@ -1,0 +1,2 @@
+# Elasticsearch Semantic Search Config
+In any files that use ES's vector search for word embeddings, there will be a setting for the number of dimensions for the embeddedings. That is dependent on the model being used. This value is hard coded into the Elasticsearch mappings for now, so they will need to be updated manually until a proper configuration management strategy is present.
