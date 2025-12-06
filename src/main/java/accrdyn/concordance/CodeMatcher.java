@@ -16,10 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.ColumnType;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.io.csv.CsvReadOptions;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public class CodeMatcher {
@@ -37,7 +43,7 @@ public class CodeMatcher {
     @Autowired
     private TextEmbedder embedder;
 
-    @Value( "${accrdyn.app.seed.on.startup}" )
+    @Value( "${accrdyn.semantic.search.seed.on.startup}" )
     private boolean seedDataOnStartup;
 
 
@@ -77,20 +83,10 @@ public class CodeMatcher {
 
         } catch ( ElasticsearchException e ) {
             LOG.error( String.format( "encountered error while initializing index '%s'", CodeMatcher.INDEX ) );
-            throw new InitializationException(
-                    String.format( "error creating elasitcsearch index '%s'", CodeMatcher.INDEX ),
-                    e,
-                    this.getClass(),
-                    "elasticsearch"
-            );
+            throw new InitializationException( String.format( "error creating elasitcsearch index '%s'", CodeMatcher.INDEX ), e, this.getClass(), "elasticsearch" );
         } catch ( IOException ioe ) {
             LOG.error( "encountered error when trying to read index mappings for index = " + CodeMatcher.INDEX );
-            throw new InitializationException(
-                    "unable to locate or read mappings file for index = " + CodeMatcher.INDEX,
-                    ioe,
-                    this.getClass(),
-                    "config_file"
-            );
+            throw new InitializationException( "unable to locate or read mappings file for index = " + CodeMatcher.INDEX, ioe, this.getClass(), "config_file" );
         }
     }
 
@@ -116,5 +112,44 @@ public class CodeMatcher {
 
     public void setEmbedder( TextEmbedder embedder ) {
         this.embedder = embedder;
+    }
+
+    private List<CodeEntryItem> loadExamplesFile( File file ) {
+        //@formatter:off
+        CsvReadOptions options =
+                CsvReadOptions
+                        .builder( file )
+                        .columnTypes( new ColumnType[]{
+                                ColumnType.STRING,
+                                ColumnType.STRING,
+                                ColumnType.STRING,
+                                ColumnType.STRING,
+                        } )
+                        .build();
+        //@formatter:on
+
+        Table examplesTable = Table.read().csv( options );
+
+        //@formatter:off
+        return examplesTable.stream().map( row -> {
+                    CodeEntryItem item = new CodeEntryItem();
+
+                    item.setId( UUID.randomUUID().toString() );
+                    item.setCode( row.getString( "code" ) );
+                    item.setSystem( row.getString( "system" ) );
+                    item.setVersion( row.getString( "version" ) );
+                    item.setDescription( row.getString( "description" ) );
+                    item.setEmbedding( this.embedder.embed( row.getString( "description" ) ) );
+
+                    return item;
+
+                } )
+                .toList();
+        //@formatter:on
+
+    }
+
+    private void bulkIndexDocuments( ElasticsearchClient esClient, List<CodeEntryItem> items ) {
+
     }
 }

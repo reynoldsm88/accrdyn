@@ -1,6 +1,7 @@
 package accrdyn.concordance.rules;
 
 import accrdyn.concordance.CodeSystemRegistry;
+import accrdyn.exceptions.InitializationException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -12,7 +13,7 @@ public class CodeSystemRegistryTest {
 
     @Test
     @Disabled
-    public void testTablesawPoc() throws Exception {
+    public void testCodeSystemRegistryInitialization() throws InitializationException {
         CodeSystemRegistry registry = new CodeSystemRegistry();
         registry.init();
 

@@ -1,5 +1,6 @@
 package accrdyn.concordance;
 
+import accrdyn.exceptions.InitializationException;
 import accrdyn.utils.ClasspathResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,12 +45,19 @@ public class CodeSystemRegistry {
         throw new RuntimeException( "VERSIONING IS NOT IMPLEMENTED YET...." );
     }
 
-    public void init() {
+    public void init() throws InitializationException {
         if ( this.codeSystems.isEmpty() ) {
             try {
                 this.loadCodeSystemDefinitions();
             } catch ( IOException e ) {
-                throw new RuntimeException( e );
+                //@formatter:off
+                throw new InitializationException(
+                        String.format( "there was an error loading the code system registry... %s", e.getMessage() ),
+                        e,
+                        this.getClass(),
+                        "config_file"
+                );
+                //@formatter:on
             }
         } else {
             LOG.warn( "code concordance service is already initialized..." );
@@ -67,7 +75,18 @@ public class CodeSystemRegistry {
     }
 
     private CodeSystem loadCodeSystemDefinition( File csvFile ) throws IOException {
-        CsvReadOptions options = CsvReadOptions.builder( csvFile ).columnTypes( new ColumnType[]{ ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, ColumnType.STRING, } ).build();
+        //@formatter:off
+        CsvReadOptions options =
+                CsvReadOptions
+                    .builder( csvFile )
+                    .columnTypes( new ColumnType[]{
+                            ColumnType.STRING,
+                            ColumnType.STRING,
+                            ColumnType.STRING,
+                            ColumnType.STRING,
+                    } )
+                    .build();
+        //@formatter:on
 
         Table codeTable = Table.read().csv( options );
 
@@ -95,7 +114,6 @@ public class CodeSystemRegistry {
         } ).toList();
 
         return new CodeSystem( name, version, codes );
-
     }
 
     public Set<CodeSystem> getCodeSystems() {
