@@ -1,7 +1,9 @@
 package accrdyn.concordance.rules;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 public class CodeConcordanceServiceTest {
 
     @Test

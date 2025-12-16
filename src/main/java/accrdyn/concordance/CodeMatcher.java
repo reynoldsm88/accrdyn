@@ -7,6 +7,8 @@ import accrdyn.nlp.TextEmbedder;
 import accrdyn.utils.ClasspathResources;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
+import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.BulkResponse;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
 import jakarta.annotation.PostConstruct;
@@ -26,6 +28,8 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+
+import static accrdyn.utils.DevTools.printDebug;
 
 @Component( "codeMatcher" )
 public class CodeMatcher {
@@ -48,23 +52,31 @@ public class CodeMatcher {
 
 
     @PostConstruct
-    public void init() throws IOException {
+    public void init() throws InitializationException {
         ElasticsearchClient client = this.esClient.getClient();
         try {
             this.initializeIndex( client );
             if ( seedDataOnStartup ) this.seedSemanticSearchData( client );
         } catch ( Exception e ) {
-
+            //@formatter:off
+            throw new InitializationException(
+                    "error initializing elasticsearch semantic search index",
+                    e,
+                    this.getClass(),
+                    "elasticsearch"
+            );
+            //@formatter:on
         }
     }
 
     private void seedSemanticSearchData( ElasticsearchClient client ) throws InitializationException {
         try {
             for ( Resource seedFile : ClasspathResources.allFrom( "classpath:semantic_search_seed/*.csv" ) ) {
-                System.out.println( "TODO..." );
+                List<CodeEntryItem> items = loadExamplesFile( seedFile.getFile() );
+                bulkIndexDocuments( CodeMatcher.INDEX, items, client );
             }
         } catch ( IOException e ) {
-            //TODO - finish this...
+            throw new InitializationException( "error seeding code examples for semantic search", e, this.getClass(), "elasticsearch" );
         }
     }
 
@@ -82,7 +94,11 @@ public class CodeMatcher {
 
         } catch ( ElasticsearchException e ) {
             LOG.error( String.format( "encountered error while initializing index '%s'", CodeMatcher.INDEX ) );
-            throw new InitializationException( String.format( "error creating elasitcsearch index '%s'", CodeMatcher.INDEX ), e, this.getClass(), "elasticsearch" );
+            if ( e.error().reason().contains( "already exists" ) ) {
+                LOG.warn( "the semantic search index already exists, ignoring..." );
+            } else {
+                throw new InitializationException( String.format( "error creating elasitcsearch index '%s'", CodeMatcher.INDEX ), e, this.getClass(), "elasticsearch" );
+            }
         } catch ( IOException ioe ) {
             LOG.error( "encountered error when trying to read index mappings for index = " + CodeMatcher.INDEX );
             throw new InitializationException( "unable to locate or read mappings file for index = " + CodeMatcher.INDEX, ioe, this.getClass(), "config_file" );
@@ -138,7 +154,25 @@ public class CodeMatcher {
 
     }
 
-    private void bulkIndexDocuments( ElasticsearchClient esClient, List<CodeEntryItem> items ) {
+    private void bulkIndexDocuments( String index, List<CodeEntryItem> items, ElasticsearchClient esClient ) {
+        BulkRequest.Builder builder = new BulkRequest.Builder();
+
+        items.forEach( item -> {
+            builder.operations( op -> {
+                op.index( indexOp -> {
+                    indexOp.index( index ).id( item.getId() ).document( item );
+                    return indexOp;
+                } );
+                return op;
+            } );
+        } );
+
+        try {
+            BulkResponse response = esClient.bulk( builder.build() );
+            printDebug( response );
+        } catch ( IOException e ) {
+            throw new RuntimeException( e );
+        }
 
     }
 }

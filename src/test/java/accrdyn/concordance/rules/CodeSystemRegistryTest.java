@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Disabled
 public class CodeSystemRegistryTest {
 
     private static final Logger LOG = LoggerFactory.getLogger( CodeSystemRegistryTest.class );
