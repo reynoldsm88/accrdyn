@@ -97,11 +97,25 @@ public class CodeMatcher {
             if ( e.error().reason().contains( "already exists" ) ) {
                 LOG.warn( "the semantic search index already exists, ignoring..." );
             } else {
-                throw new InitializationException( String.format( "error creating elasitcsearch index '%s'", CodeMatcher.INDEX ), e, this.getClass(), "elasticsearch" );
+                //@formatter:off
+                throw new InitializationException(
+                        String.format( "error creating elasitcsearch index '%s'", CodeMatcher.INDEX ),
+                        e,
+                        this.getClass(),
+                        "elasticsearch"
+                );
+                //@formatter:on
             }
         } catch ( IOException ioe ) {
             LOG.error( "encountered error when trying to read index mappings for index = " + CodeMatcher.INDEX );
-            throw new InitializationException( "unable to locate or read mappings file for index = " + CodeMatcher.INDEX, ioe, this.getClass(), "config_file" );
+            //@formatter:off
+            throw new InitializationException(
+                    "unable to locate or read mappings file for index = " + CodeMatcher.INDEX,
+                    ioe,
+                    this.getClass(),
+                    "config_file"
+            );
+            //@formatter:on
         }
     }
 
@@ -180,6 +194,5 @@ public class CodeMatcher {
         } catch ( IOException e ) {
             throw new RuntimeException( e );
         }
-
     }
 }

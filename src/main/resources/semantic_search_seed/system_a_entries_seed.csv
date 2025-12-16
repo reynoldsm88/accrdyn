@@ -6,3 +6,56 @@ code,system,version,description
 000000,SYSTEM_A,2025,brazil nuts
 000000,SYSTEM_A,2025,mixed nuts salted
 000000,SYSTEM_A,2025,roasted almonds unsalted
+000000,SYSTEM_A,2025,hazelnuts shelled
+000000,SYSTEM_A,2025,raw hazelnuts
+000000,SYSTEM_A,2025,shelled pistachios
+000001,SYSTEM_A,2025,steel screws
+000001,SYSTEM_A,2025,titanium screws
+000001,SYSTEM_A,2025,screws
+000001,SYSTEM_A,2025,copper screws
+000001,SYSTEM_A,2025,screws copper
+000001,SYSTEM_A,2025,gold screws
+000001,SYSTEM_A,2025,screws gold
+000001,SYSTEM_A,2025,assorted screws
+000001,SYSTEM_A,2025,screws misc
+000001,SYSTEM_A,2025,screws and washers steel
+000002,SYSTEM_A,2025,steel nuts
+000002,SYSTEM_A,2025,titanium nuts
+000002,SYSTEM_A,2025,nuts
+000002,SYSTEM_A,2025,copper nut
+000002,SYSTEM_A,2025,nuts copper
+000002,SYSTEM_A,2025,gold nut
+000002,SYSTEM_A,2025,lug nuts metal
+000002,SYSTEM_A,2025,assorted nuts and lug nuts
+000002,SYSTEM_A,2025,nuts metal misc
+000002,SYSTEM_A,2025,lug nuts
+000003,SYSTEM_A,2025,steel bolts
+000003,SYSTEM_A,2025,titanium bolts
+000003,SYSTEM_A,2025,bolts
+000003,SYSTEM_A,2025,copper bolt
+000003,SYSTEM_A,2025,bolts copper
+000003,SYSTEM_A,2025,gold bolt
+000003,SYSTEM_A,2025,lug bolts metal
+000003,SYSTEM_A,2025,assorted bolts and lug bolts
+000003,SYSTEM_A,2025,bolts metal misc
+000003,SYSTEM_A,2025,lug bolts
+000004,SYSTEM_A,2025,eyeglass lenses
+000004,SYSTEM_A,2025,lenses for eyeglasses
+000004,SYSTEM_A,2025,progressive lenses
+000004,SYSTEM_A,2025,lenses bifocal
+000004,SYSTEM_A,2025,bifocal lens
+000004,SYSTEM_A,2025,gold bolt
+000004,SYSTEM_A,2025,lens progressive
+000004,SYSTEM_A,2025,progressive lenses
+000004,SYSTEM_A,2025,trifocal lenses
+000004,SYSTEM_A,2025,glass lens
+000005,SYSTEM_A,2025,replacement lens for endoscopy equipment
+000005,SYSTEM_A,2025,corrosion resistent lens
+000005,SYSTEM_A,2025,precision optical stereo fluorescence lens
+000005,SYSTEM_A,2025,high temperature microscope lenses
+000005,SYSTEM_A,2025,microscope lens
+000005,SYSTEM_A,2025,ultra high precision lens
+000005,SYSTEM_A,2025,objective lenses microscope
+000005,SYSTEM_A,2025,lens for ophthalmic imaging
+000005,SYSTEM_A,2025,fiberscope lenses
+000005,SYSTEM_A,2025,aspheric lens

@@ -2,7 +2,7 @@ system,code,version,description
 SYSTEM_A,000000,2025,unprocessed nut products
 SYSTEM_A,000001,2025,metal screws
 SYSTEM_A,000002,2025,metal nuts
-SYSTEM_A,000002,2025,metal bolts
-SYSTEM_A,000003,2025,glass optical lenses for eyeglasses
-SYSTEM_A,000004,2025,glass optical lenses for medical imaging devices
+SYSTEM_A,000003,2025,metal bolts
+SYSTEM_A,000004,2025,glass optical lenses for eyeglasses
+SYSTEM_A,000005,2025,glass optical lenses for medical imaging devices
 
