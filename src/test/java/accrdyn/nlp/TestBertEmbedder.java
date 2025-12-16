@@ -1,19 +1,20 @@
 package accrdyn.nlp;
 
-import accrdyn.exceptions.InitializationException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class TestBertEmbedder {
 
-    private BertTextEmbedder textEmbedder = new BertTextEmbedder();
+
+    @Autowired
+    private TextEmbedder textEmbedder;
+
 
     @Test
-    @Disabled
-    public void testBertEmbedder() throws InitializationException {
-        textEmbedder.init();
+    public void testBertEmbedder() {
         float[] embedding = textEmbedder.embed( "hello world" );
-
         assert embedding.length > 1;
     }
 }

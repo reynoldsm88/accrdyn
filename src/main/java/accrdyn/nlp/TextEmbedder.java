@@ -1,7 +1,11 @@
 package accrdyn.nlp;
 
+import accrdyn.exceptions.InitializationException;
+
 public interface TextEmbedder {
 
-    public float[] embed( String text );
+    float[] embed( String text );
+
+    void init() throws InitializationException;
 
 }

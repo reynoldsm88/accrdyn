@@ -12,7 +12,6 @@ public class CodeSystemRegistryTest {
     private static final Logger LOG = LoggerFactory.getLogger( CodeSystemRegistryTest.class );
 
     @Test
-    @Disabled
     public void testCodeSystemRegistryInitialization() throws InitializationException {
         CodeSystemRegistry registry = new CodeSystemRegistry();
         registry.init();

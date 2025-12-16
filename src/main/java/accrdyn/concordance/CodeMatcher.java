@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Component( "codeMatcher" )
 public class CodeMatcher {
 
     private static final Logger LOG = LoggerFactory.getLogger( CodeMatcher.class );
@@ -63,7 +63,6 @@ public class CodeMatcher {
             for ( Resource seedFile : ClasspathResources.allFrom( "classpath:semantic_search_seed/*.csv" ) ) {
                 System.out.println( "TODO..." );
             }
-
         } catch ( IOException e ) {
             //TODO - finish this...
         }
@@ -90,24 +89,12 @@ public class CodeMatcher {
         }
     }
 
-    public ESClient getEsClient() {
-        return esClient;
-    }
-
     public void setEsClient( ESClient esClient ) {
         this.esClient = esClient;
     }
 
-    public Resource getCodeEntryMappings() {
-        return codeEntryMappings;
-    }
-
     public void setCodeEntryMappings( Resource codeEntryMappings ) {
         this.codeEntryMappings = codeEntryMappings;
-    }
-
-    public TextEmbedder getEmbedder() {
-        return embedder;
     }
 
     public void setEmbedder( TextEmbedder embedder ) {
@@ -131,7 +118,9 @@ public class CodeMatcher {
         Table examplesTable = Table.read().csv( options );
 
         //@formatter:off
-        return examplesTable.stream().map( row -> {
+        return examplesTable
+                .stream()
+                .map( row -> {
                     CodeEntryItem item = new CodeEntryItem();
 
                     item.setId( UUID.randomUUID().toString() );

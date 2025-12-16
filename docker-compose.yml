@@ -4,6 +4,8 @@ services:
     image: accrdyn:latest
     container_name: accrdyn-web
     hostname: accrdyn-web
+    environment:
+      DJL_CACHE_DIR:
     ports:
       - 8080:8080
     depends_on:

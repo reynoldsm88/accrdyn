@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
+@Component( value = "textEmbedder" )
 public class BertTextEmbedder implements TextEmbedder {
 
     private static final Logger LOG = LoggerFactory.getLogger( BertTextEmbedder.class );
@@ -45,6 +45,7 @@ public class BertTextEmbedder implements TextEmbedder {
     }
 
     @PostConstruct
+    @Override
     public void init() throws InitializationException {
         try {
             if ( this.modelPredictor == null ) {

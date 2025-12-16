@@ -9,7 +9,6 @@
     <properties>
         <java.version>TODO</java.version>
 
-
         <smile.version>5.0.0</smile.version>
         <drools.version>10.1.0</drools.version>
         <elasticsearch.version>9.2.1</elasticsearch.version>
@@ -21,7 +20,7 @@
         <logback.version>1.5.21</logback.version>
         <slf4j.version>2.0.17</slf4j.version>
 
-        <junit.version>5.11.0</junit.version>
+        <junit.version>6.0.1</junit.version>
     </properties>
 
     <dependencies>
@@ -129,6 +128,12 @@
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
@@ -181,6 +186,26 @@
                     <source>16</source>
                     <target>16</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>set-system-properties</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>ai.djl.cache.dir</name>
+                                    <value>target/djl/models</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
