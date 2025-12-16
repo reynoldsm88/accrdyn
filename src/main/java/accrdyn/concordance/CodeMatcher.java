@@ -118,6 +118,11 @@ public class CodeMatcher {
     }
 
     private List<CodeEntryItem> loadExamplesFile( File file ) {
+        try {
+            printDebug( file.getCanonicalPath() );
+        } catch ( Exception e ) {
+
+        }
         //@formatter:off
         CsvReadOptions options =
                 CsvReadOptions
@@ -155,6 +160,8 @@ public class CodeMatcher {
     }
 
     private void bulkIndexDocuments( String index, List<CodeEntryItem> items, ElasticsearchClient esClient ) {
+        printDebug( "number of items: " + items.size() );
+
         BulkRequest.Builder builder = new BulkRequest.Builder();
 
         items.forEach( item -> {

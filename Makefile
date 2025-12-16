@@ -7,6 +7,9 @@ fastpack:
 test:
 	mvn clean test
 
+dt:
+	mvn clean -Dmaven.surefire.debug test
+
 run: fastpack
 	java -jar target/accrdyn-web-api-0.0.1-SNAPSHOT.jar
 

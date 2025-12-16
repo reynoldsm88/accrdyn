@@ -1,6 +1,7 @@
 package accrdyn.nlp;
 
 import accrdyn.exceptions.InitializationException;
+import accrdyn.utils.DevTools;
 import ai.djl.Application;
 import ai.djl.Device;
 import ai.djl.MalformedModelException;
@@ -68,6 +69,8 @@ public class BertTextEmbedder implements TextEmbedder {
                 LOG.info( String.format( "BERT model loaded: name = %s", model.getName() ) );
                 this.modelPredictor = model.newPredictor();
                 LOG.info( "BERT word embedder finished initializing..." );
+                DevTools.printDebug( model.describeInput() );
+                DevTools.printDebug( model.describeOutput() );
 
             } else {
                 LOG.warn( "BERT word embedder already initialized..." );
